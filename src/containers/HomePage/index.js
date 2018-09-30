@@ -1,8 +1,9 @@
 import React from "react";
+import Header from "../../components/Header";
 
 const HomePage = () => (
   <React.Fragment>
-    <h1>Home Page</h1>
+    <Header />
   </React.Fragment>
 );
 

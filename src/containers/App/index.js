@@ -1,9 +1,13 @@
 import React from "react";
+import { Switch, Route, BrowserRouter } from "react-router-dom";
+import HomePage from "../HomePage";
 
 const App = () => (
-  <div className="App">
-    <h1 className="App-title">Nearbi</h1>
-  </div>
+  <BrowserRouter>
+    <Switch>
+      <Route exact path="/" component={HomePage} />
+    </Switch>
+  </BrowserRouter>
 );
 
 export default App;
