@@ -1,16 +1,17 @@
 import React from "react";
-import { Menu, Container } from "semantic-ui-react";
+import { Menu, Container, Icon } from "semantic-ui-react";
 
-const Header = () => (
+const SiteHeader = () => (
   <React.Fragment>
     <Menu inverted>
       <Container>
         <Menu.Item as="a" header>
-          Nearbi
+          <Icon name="location arrow" size="large" inverted />
+          NEARBI
         </Menu.Item>
       </Container>
     </Menu>
   </React.Fragment>
 );
 
-export default Header;
+export default SiteHeader;
