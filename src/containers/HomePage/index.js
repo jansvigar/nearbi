@@ -1,21 +1,35 @@
 import React from 'react';
-import {Segment, Container, Grid} from 'semantic-ui-react';
+import {withStyles} from '@material-ui/core/styles';
+import Paper from '@material-ui/core/Paper';
 import Header from '../../components/Header';
 import Map from '../../components/Map';
+import SearchBox from '../../components/SearchBox';
 
-const HomePage = () => (
-  <React.Fragment>
-    <Grid style={{height: '90vh'}}>
-      <Grid.Column width={16}>
-        <Header />
-        <Container style={{height: '100%'}}>
-          <Segment style={{height: '100%'}}>
-            <Map />
-          </Segment>
-        </Container>
-      </Grid.Column>
-    </Grid>
-  </React.Fragment>
-);
+const styles = theme => ({
+  layout: {
+    width: '90%',
+    maxWidth: '1100px',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+  },
+  map: {
+    height: '500px',
+  },
+});
 
-export default HomePage;
+const HomePage = props => {
+  const {classes} = props;
+  return (
+    <React.Fragment>
+      <Header />
+      <main className={classes.layout}>
+        <SearchBox />
+        <Paper className={classes.map} elevation={1}>
+          <Map />
+        </Paper>
+      </main>
+    </React.Fragment>
+  );
+};
+
+export default withStyles(styles)(HomePage);

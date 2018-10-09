@@ -6,6 +6,8 @@ mapboxgl.accessToken =
   'pk.eyJ1IjoiamFuc3ZpZ2FyIiwiYSI6ImNqbW9sNXM0bDE1cXIzdXFjNzY2dG0zb3MifQ.gRjATaFIQkgpCcQ0vKDJ-A';
 
 const style = {
+  maxHeight: '600px',
+  minHeight: '300px',
   height: '100%',
 };
 
