@@ -2,8 +2,7 @@ import React, {Component} from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
-mapboxgl.accessToken =
-  'pk.eyJ1IjoiamFuc3ZpZ2FyIiwiYSI6ImNqbW9sNXM0bDE1cXIzdXFjNzY2dG0zb3MifQ.gRjATaFIQkgpCcQ0vKDJ-A';
+mapboxgl.accessToken = process.env.REACT_APP_MAP_GL;
 
 const style = {
   maxHeight: '600px',
