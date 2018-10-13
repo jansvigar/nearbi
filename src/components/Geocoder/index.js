@@ -1,6 +1,7 @@
 import {Component} from 'react';
 import isEqual from 'react-fast-compare';
 import MapboxClient from 'mapbox/lib/services/geocoding';
+import debounce from 'lodash/debounce';
 
 class Geocoder extends Component {
   mapboxGeocoder;
@@ -23,10 +24,15 @@ class Geocoder extends Component {
     }
   }
 
-  fetchData() {
+  fetchData = debounce(() => {
     const {query} = this.props;
 
-    this.setState({loading: true, data: [], error: false});
+    this.setState({data: [], loading: true, error: false});
+
+    if (!query) {
+      this.setState({loading: false});
+      return;
+    }
 
     this.mapboxGeocoder.geocodeForward(query).then(response => {
       this.setState({
@@ -35,7 +41,7 @@ class Geocoder extends Component {
         error: false,
       });
     });
-  }
+  }, 200);
 
   render() {
     const {children} = this.props;

@@ -4,6 +4,8 @@ import {withStyles} from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import MenuItem from '@material-ui/core/MenuItem';
+import Typography from '@material-ui/core/Typography';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Geocoder from '../Geocoder';
 
 const styles = theme => ({
@@ -20,6 +22,9 @@ const styles = theme => ({
     marginTop: theme.spacing.unit,
     left: 0,
     right: 0,
+  },
+  loader: {
+    margin: theme.spacing.unit * 2,
   },
 });
 
@@ -89,6 +94,34 @@ const SearchBox = props => {
                 <Paper className={classes.paper} square>
                   <Geocoder query={inputValue}>
                     {({data, loading, error}) => {
+                      if (loading) {
+                        return (
+                          <MenuItem>
+                            <CircularProgress
+                              size={20}
+                              className={classes.loader}
+                            />{' '}
+                            <Typography variant="inherit">
+                              Loading...
+                            </Typography>
+                          </MenuItem>
+                        );
+                      }
+
+                      if (error) {
+                        return (
+                          <MenuItem>
+                            <Typography variant="inherit">
+                              There is an error loading data
+                            </Typography>
+                          </MenuItem>
+                        );
+                      }
+
+                      if (!data.length) {
+                        return <MenuItem>No result</MenuItem>;
+                      }
+
                       return data.map((suggestion, index) =>
                         renderSuggestion({
                           suggestion,
