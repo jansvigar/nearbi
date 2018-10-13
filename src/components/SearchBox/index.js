@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from 'react';
 import Downshift from 'downshift';
 import {withStyles} from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
@@ -49,7 +49,10 @@ function renderSuggestion({
   selectedItem,
 }) {
   const isHighlighted = highlightedIndex === index;
-  const isSelected = (selectedItem || '').indexOf(suggestion) > -1;
+  const isSelected =
+    ((selectedItem && selectedItem.place_name) || '').indexOf(
+      suggestion.place_name,
+    ) > -1;
 
   return (
     <MenuItem
@@ -65,84 +68,91 @@ function renderSuggestion({
   );
 }
 
-const SearchBox = props => {
-  const {classes} = props;
-  return (
-    <div className={classes.root}>
-      <Downshift id="nearbi-address-search-box">
-        {({
-          getInputProps,
-          getItemProps,
-          getMenuProps,
-          highlightedIndex,
-          inputValue,
-          isOpen,
-          selectedItem,
-        }) => (
-          <div className={classes.container}>
-            {renderInput({
-              fullWidth: true,
-              margin: 'normal',
-              label: 'Enter an address',
-              variant: 'outlined',
-              InputProps: getInputProps({
-                id: 'search-address',
-              }),
-            })}
-            <div {...getMenuProps()}>
-              {isOpen ? (
-                <Paper className={classes.paper} square>
-                  <Geocoder query={inputValue}>
-                    {({data, loading, error}) => {
-                      if (loading) {
-                        return (
-                          <MenuItem>
-                            <CircularProgress
-                              size={20}
-                              className={classes.loader}
-                            />{' '}
-                            <Typography variant="inherit">
-                              Loading...
-                            </Typography>
-                          </MenuItem>
-                        );
-                      }
+class SearchBox extends Component {
+  render() {
+    const {classes} = this.props;
+    return (
+      <div className={classes.root}>
+        <Downshift
+          id="nearbi-address-search-box"
+          onChange={this.props.onChange}
+          itemToString={selectedItem =>
+            selectedItem ? selectedItem.place_name : ''
+          }>
+          {({
+            getInputProps,
+            getItemProps,
+            getMenuProps,
+            highlightedIndex,
+            inputValue,
+            isOpen,
+            selectedItem,
+          }) => (
+            <div className={classes.container}>
+              {renderInput({
+                fullWidth: true,
+                margin: 'normal',
+                label: 'Enter an address',
+                variant: 'outlined',
+                InputProps: getInputProps({
+                  id: 'search-address',
+                }),
+              })}
+              <div {...getMenuProps()}>
+                {isOpen ? (
+                  <Paper className={classes.paper} square>
+                    <Geocoder query={inputValue}>
+                      {({data, loading, error}) => {
+                        if (loading) {
+                          return (
+                            <MenuItem>
+                              <CircularProgress
+                                size={20}
+                                className={classes.loader}
+                              />{' '}
+                              <Typography variant="inherit">
+                                Loading...
+                              </Typography>
+                            </MenuItem>
+                          );
+                        }
 
-                      if (error) {
-                        return (
-                          <MenuItem>
-                            <Typography variant="inherit">
-                              There is an error loading data
-                            </Typography>
-                          </MenuItem>
-                        );
-                      }
+                        if (error) {
+                          return (
+                            <MenuItem>
+                              <Typography variant="inherit">
+                                There is an error loading data
+                              </Typography>
+                            </MenuItem>
+                          );
+                        }
 
-                      if (!data.length) {
-                        return <MenuItem>No result</MenuItem>;
-                      }
+                        if (!data.length) {
+                          return <MenuItem>No result</MenuItem>;
+                        }
 
-                      return data.map((suggestion, index) =>
-                        renderSuggestion({
-                          suggestion,
-                          index,
-                          itemProps: getItemProps({
-                            item: suggestion.place_name,
+                        return data.map((suggestion, index) =>
+                          renderSuggestion({
+                            suggestion,
+                            index,
+                            itemProps: getItemProps({
+                              item: suggestion,
+                            }),
+                            highlightedIndex,
+                            selectedItem,
                           }),
-                          highlightedIndex,
-                          selectedItem,
-                        }),
-                      );
-                    }}
-                  </Geocoder>
-                </Paper>
-              ) : null}
+                        );
+                      }}
+                    </Geocoder>
+                  </Paper>
+                ) : null}
+              </div>
             </div>
-          </div>
-        )}
-      </Downshift>
-    </div>
-  );
-};
+          )}
+        </Downshift>
+      </div>
+    );
+  }
+}
 
 export default withStyles(styles)(SearchBox);

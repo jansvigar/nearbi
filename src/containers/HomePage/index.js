@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from 'react';
 import {withStyles} from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Header from '../../components/Header';
@@ -17,19 +17,32 @@ const styles = theme => ({
   },
 });
 
-const HomePage = props => {
-  const {classes} = props;
-  return (
-    <React.Fragment>
-      <Header />
-      <main className={classes.layout}>
-        <SearchBox />
-        <Paper className={classes.map} elevation={1}>
-          <Map />
-        </Paper>
-      </main>
-    </React.Fragment>
-  );
-};
+class HomePage extends Component {
+  state = {
+    selectedItem: null,
+  };
+
+  handleChange = selectedItem => {
+    this.setState({
+      selectedItem,
+    });
+  };
+
+  render() {
+    const {classes} = this.props;
+    const {selectedItem} = this.state;
+    return (
+      <React.Fragment>
+        <Header />
+        <main className={classes.layout}>
+          <SearchBox onChange={this.handleChange} />
+          <Paper className={classes.map} elevation={1}>
+            <Map selectedAddress={selectedItem} />
+          </Paper>
+        </main>
+      </React.Fragment>
+    );
+  }
+}
 
 export default withStyles(styles)(HomePage);
