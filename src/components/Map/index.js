@@ -44,19 +44,10 @@ class Map extends Component {
   componentDidUpdate(prevProps, prevState) {
     if (!isEqual(prevProps, this.props)) {
       const [lng, lat] = this.props.selectedAddress.center;
-      this.setState(
-        {
-          lng,
-          lat,
-          zoom: 13,
-        },
-        () => {
-          this.map.flyTo({
-            center: [this.state.lng, this.state.lat],
-            zoom: this.state.zoom,
-          });
-        },
-      );
+      this.map.flyTo({
+        center: [lng, lat],
+        zoom: 13,
+      });
     }
   }
 

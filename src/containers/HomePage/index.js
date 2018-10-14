@@ -4,6 +4,7 @@ import Paper from '@material-ui/core/Paper';
 import Header from '../../components/Header';
 import Map from '../../components/Map';
 import SearchBox from '../../components/SearchBox';
+import Foursquare from '../../components/Foursquare';
 
 const styles = theme => ({
   layout: {
@@ -37,7 +38,11 @@ class HomePage extends Component {
         <main className={classes.layout}>
           <SearchBox onChange={this.handleChange} />
           <Paper className={classes.map} elevation={1}>
-            <Map selectedAddress={selectedItem} />
+            <Foursquare selectedItem={selectedItem}>
+              {({places}) => {
+                return <Map selectedAddress={selectedItem} places={places} />;
+              }}
+            </Foursquare>
           </Paper>
         </main>
       </React.Fragment>
