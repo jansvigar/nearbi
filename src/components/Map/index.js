@@ -42,13 +42,33 @@ class Map extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (!isEqual(prevProps, this.props)) {
+    if (!isEqual(prevProps.selectedAddress, this.props.selectedAddress)) {
       const [lng, lat] = this.props.selectedAddress.center;
       this.map.flyTo({
         center: [lng, lat],
         zoom: 13,
       });
     }
+
+    if (
+      !isEqual(prevProps.places, this.props.places) &&
+      this.props.places.length > 0
+    ) {
+      this.renderMarkups();
+    }
+  }
+
+  renderMarkups() {
+    const {places} = this.props;
+    places.forEach(place => {
+      console.log(place);
+      let popup = new mapboxgl.Popup({offset: 25}).setText(place.name);
+
+      new mapboxgl.Marker()
+        .setLngLat([place.location.lng, place.location.lat])
+        .setPopup(popup)
+        .addTo(this.map);
+    });
   }
 
   render() {
