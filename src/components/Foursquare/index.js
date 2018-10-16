@@ -4,20 +4,23 @@ import isEqual from 'react-fast-compare';
 class Foursquare extends Component {
   state = {
     places: [],
+    suggestedBounds: [],
   };
 
   fetchData() {
     const [lng, lat] = this.props.selectedItem.center;
     fetch(
-      `https://api.foursquare.com/v2/venues/search?client_id=${
+      `https://api.foursquare.com/v2/venues/explore?client_id=${
         process.env.REACT_APP_FOURSQUARE_CLIENT_ID
       }&client_secret=${
         process.env.REACT_APP_FOURSQUARE_CLIENT_SECRET
-      }&v=20180323&ll=${lat},${lng}`,
+      }&v=20180323&ll=${lat},${lng}&sortByDistance=1`,
     )
       .then(res => res.json())
       .then(data => {
-        this.setState({places: data.response.venues});
+        console.log(data);
+        const {groups} = data.response;
+        this.setState({places: groups[0].items});
       })
       .catch(error => {
         console.log(error);

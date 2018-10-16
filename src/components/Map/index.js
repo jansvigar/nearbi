@@ -19,6 +19,7 @@ class Map extends Component {
   };
 
   map;
+  markers = [];
 
   componentDidMount() {
     const {lng, lat, zoom} = this.state;
@@ -46,7 +47,7 @@ class Map extends Component {
       const [lng, lat] = this.props.selectedAddress.center;
       this.map.flyTo({
         center: [lng, lat],
-        zoom: 13,
+        zoom: 12,
       });
     }
 
@@ -54,21 +55,44 @@ class Map extends Component {
       !isEqual(prevProps.places, this.props.places) &&
       this.props.places.length > 0
     ) {
-      this.renderMarkups();
+      this.renderMarkers();
     }
   }
 
-  renderMarkups() {
+  renderMarkers() {
     const {places} = this.props;
-    places.forEach(place => {
-      console.log(place);
-      let popup = new mapboxgl.Popup({offset: 25}).setText(place.name);
+    const [lng, lat] = this.props.selectedAddress.center;
 
-      new mapboxgl.Marker()
-        .setLngLat([place.location.lng, place.location.lat])
+    this.clearAllMarkers();
+
+    new mapboxgl.Marker().setLngLat([lng, lat]).addTo(this.map);
+
+    places.forEach(place => {
+      let popup = new mapboxgl.Popup({offset: 25}).setText(place.venue.name);
+
+      let divEl = document.createElement('div');
+      divEl.style.backgroundImage = `url(${
+        place.venue.categories[0].icon.prefix
+      }32${place.venue.categories[0].icon.suffix})`;
+      divEl.style.width = '32px';
+      divEl.style.height = '32px';
+      divEl.style.backgroundColor = '#4283f4';
+      divEl.style.borderRadius = '10px';
+      divEl.style.border = '1px solid #ddd';
+
+      let marker = new mapboxgl.Marker(divEl)
+        .setLngLat([place.venue.location.lng, place.venue.location.lat])
         .setPopup(popup)
         .addTo(this.map);
+
+      this.markers.push(marker);
     });
+  }
+
+  clearAllMarkers() {
+    if (this.markers.length > 0) {
+      this.markers.forEach(el => el.remove());
+    }
   }
 
   render() {
