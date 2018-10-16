@@ -65,7 +65,9 @@ class Map extends Component {
 
     this.clearAllMarkers();
 
-    new mapboxgl.Marker().setLngLat([lng, lat]).addTo(this.map);
+    this.markers.push(
+      new mapboxgl.Marker().setLngLat([lng, lat]).addTo(this.map),
+    );
 
     places.forEach(place => {
       let popup = new mapboxgl.Popup({offset: 25}).setText(place.venue.name);
