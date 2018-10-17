@@ -32,7 +32,7 @@ class NearbiList extends Component {
           {locations.length > 0 ? (
             locations.map(location => (
               <React.Fragment key={location.place.venue.id}>
-                <ListItem button>
+                <ListItem button onClick={this.props.onListItemClick(location)}>
                   <ListItemText primary={location.place.venue.name} />
                 </ListItem>
                 <Divider />

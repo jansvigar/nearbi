@@ -18,7 +18,6 @@ class Foursquare extends Component {
     )
       .then(res => res.json())
       .then(data => {
-        console.log(data);
         const {groups} = data.response;
         this.setState({places: groups[0].items});
       })

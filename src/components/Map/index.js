@@ -111,12 +111,35 @@ class Map extends Component {
     }
   }
 
+  clearAllPopups() {
+    if (this.state.markers.length > 0) {
+      this.state.markers.forEach(
+        el => el.marker.getPopup().isOpen() && el.marker.togglePopup(),
+      );
+    }
+  }
+
+  handleListItemClick = location => () => {
+    this.clearAllPopups();
+    location.marker.togglePopup();
+    this.map.flyTo({
+      center: [
+        location.place.venue.location.lng,
+        location.place.venue.location.lat,
+      ],
+      zoom: 16,
+    });
+  };
+
   render() {
     return (
       <React.Fragment>
         <Grid item xs={3}>
           <Paper className={this.props.classes.paper} elevation={1}>
-            <NearbiList locations={this.state.markers} />
+            <NearbiList
+              locations={this.state.markers}
+              onListItemClick={this.handleListItemClick}
+            />
           </Paper>
         </Grid>
         <Grid item xs={9}>

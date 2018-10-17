@@ -69,6 +69,15 @@ function renderSuggestion({
 }
 
 class SearchBox extends Component {
+  state = {
+    inputValue: '',
+  };
+  componentDidMount() {
+    this.setState({
+      inputValue:
+        '2465 Latham Street, Mountain View, California 94040, United States',
+    });
+  }
   render() {
     const {classes} = this.props;
     return (
@@ -78,7 +87,8 @@ class SearchBox extends Component {
           onChange={this.props.onChange}
           itemToString={selectedItem =>
             selectedItem ? selectedItem.place_name : ''
-          }>
+          }
+          inputValue={this.state.inputValue}>
           {({
             getInputProps,
             getItemProps,
