@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import {withStyles} from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
 import Header from '../../components/Header';
 import Map from '../../components/Map';
+import Grid from '@material-ui/core/Grid';
 import SearchBox from '../../components/SearchBox';
 import Foursquare from '../../components/Foursquare';
 
@@ -12,9 +12,6 @@ const styles = theme => ({
     maxWidth: '1100px',
     marginLeft: 'auto',
     marginRight: 'auto',
-  },
-  map: {
-    height: '500px',
   },
 });
 
@@ -36,14 +33,16 @@ class HomePage extends Component {
       <React.Fragment>
         <Header />
         <main className={classes.layout}>
-          <SearchBox onChange={this.handleChange} />
-          <Paper className={classes.map} elevation={1}>
+          <Grid container spacing={8}>
+            <Grid item xs={12}>
+              <SearchBox onChange={this.handleChange} />
+            </Grid>
             <Foursquare selectedItem={selectedItem}>
               {({places}) => {
                 return <Map selectedAddress={selectedItem} places={places} />;
               }}
             </Foursquare>
-          </Paper>
+          </Grid>
         </main>
       </React.Fragment>
     );

@@ -1,25 +1,34 @@
 import React, {Component} from 'react';
+import {withStyles} from '@material-ui/core/styles';
+import Paper from '@material-ui/core/Paper';
+import Grid from '@material-ui/core/Grid';
 import mapboxgl from 'mapbox-gl';
 import isEqual from 'react-fast-compare';
 import 'mapbox-gl/dist/mapbox-gl.css';
+import NearbiList from '../../components/NearbiList';
 
 mapboxgl.accessToken = process.env.REACT_APP_MAP_GL;
 
-const style = {
-  maxHeight: '600px',
-  minHeight: '300px',
-  height: '100%',
-};
+const styles = theme => ({
+  map: {
+    height: '100%',
+  },
+  paper: {
+    height: '550px',
+    overflowY: 'scroll',
+  },
+});
 
 class Map extends Component {
   state = {
     lng: 5,
     lat: 34,
     zoom: 1,
+    markers: [],
   };
 
   map;
-  markers = [];
+  currentMarker;
 
   componentDidMount() {
     const {lng, lat, zoom} = this.state;
@@ -65,10 +74,11 @@ class Map extends Component {
 
     this.clearAllMarkers();
 
-    this.markers.push(
-      new mapboxgl.Marker().setLngLat([lng, lat]).addTo(this.map),
-    );
+    this.currentMarker = new mapboxgl.Marker()
+      .setLngLat([lng, lat])
+      .addTo(this.map);
 
+    let markers = [];
     places.forEach(place => {
       let popup = new mapboxgl.Popup({offset: 25}).setText(place.venue.name);
 
@@ -87,22 +97,38 @@ class Map extends Component {
         .setPopup(popup)
         .addTo(this.map);
 
-      this.markers.push(marker);
+      markers.push({place, marker});
     });
+    this.setState({markers});
   }
 
   clearAllMarkers() {
-    if (this.markers.length > 0) {
-      this.markers.forEach(el => el.remove());
+    if (this.currentMarker) {
+      this.currentMarker.remove();
+    }
+    if (this.state.markers.length > 0) {
+      this.state.markers.forEach(el => el.marker.remove());
     }
   }
 
   render() {
     return (
       <React.Fragment>
-        <div ref={el => (this.mapContainer = el)} style={style} />
+        <Grid item xs={3}>
+          <Paper className={this.props.classes.paper} elevation={1}>
+            <NearbiList locations={this.state.markers} />
+          </Paper>
+        </Grid>
+        <Grid item xs={9}>
+          <Paper className={this.props.classes.paper} elevation={1}>
+            <div
+              ref={el => (this.mapContainer = el)}
+              className={this.props.classes.map}
+            />
+          </Paper>
+        </Grid>
       </React.Fragment>
     );
   }
 }
-export default Map;
+export default withStyles(styles)(Map);
