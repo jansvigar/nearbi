@@ -13,8 +13,21 @@ const styles = theme => ({
   map: {
     height: "100%"
   },
-  paper: {
-    height: "550px",
+  mapPaper: {
+    [theme.breakpoints.up("xs")]: {
+      height: "250px"
+    },
+    [theme.breakpoints.up("sm")]: {
+      height: "550px"
+    }
+  },
+  listPaper: {
+    [theme.breakpoints.up("xs")]: {
+      height: "300px"
+    },
+    [theme.breakpoints.up("sm")]: {
+      height: "550px"
+    },
     overflowY: "scroll"
   }
 });
@@ -46,6 +59,7 @@ class Map extends Component {
         center: [lng, lat],
         zoom: 14
       });
+      this.setState({ category: "" });
     }
 
     if (
@@ -146,8 +160,8 @@ class Map extends Component {
   render() {
     return (
       <React.Fragment>
-        <Grid item xs={3}>
-          <Paper className={this.props.classes.paper} elevation={1}>
+        <Grid item xs={12} sm={3}>
+          <Paper className={this.props.classes.listPaper} elevation={1}>
             <NearbiList
               locations={this.state.markers}
               categories={this.props.categories}
@@ -156,8 +170,8 @@ class Map extends Component {
             />
           </Paper>
         </Grid>
-        <Grid item xs={9}>
-          <Paper className={this.props.classes.paper} elevation={1}>
+        <Grid item xs={12} sm={9}>
+          <Paper className={this.props.classes.mapPaper} elevation={1}>
             <div
               ref={el => (this.mapContainer = el)}
               className={this.props.classes.map}

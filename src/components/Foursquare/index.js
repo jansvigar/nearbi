@@ -23,7 +23,7 @@ class Foursquare extends Component {
         this.setState({
           places: groups[0].items,
           categories: new Set(
-            groups[0].items.map(item => item.venue.categories[0].name)
+            groups[0].items.map(item => item.venue.categories[0].name).sort()
           )
         });
       })

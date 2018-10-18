@@ -5,6 +5,7 @@ import Map from "../../components/Map";
 import Grid from "@material-ui/core/Grid";
 import SearchBox from "../../components/SearchBox";
 import Foursquare from "../../components/Foursquare";
+import Footer from "../../components/Footer";
 
 const styles = theme => ({
   layout: {
@@ -55,6 +56,7 @@ class HomePage extends Component {
             </Foursquare>
           </Grid>
         </main>
+        <Footer />
       </React.Fragment>
     );
   }
