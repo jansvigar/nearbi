@@ -66,7 +66,15 @@ class Map extends Component {
 
     let markers = [];
     places.forEach(place => {
-      let popup = new mapboxgl.Popup({offset: 25}).setText(place.venue.name);
+      let popup = new mapboxgl.Popup({offset: 25}).setHTML(
+        `<p>
+          <em>${place.venue.categories[0].name}</em><br>
+          <strong>${place.venue.name}</strong><br>
+          ${place.venue.location.formattedAddress[0]}<br>
+          ${place.venue.location.formattedAddress[1]}<br>
+          ${place.venue.location.formattedAddress[2]} 
+        </p>`,
+      );
 
       let divEl = document.createElement('div');
       divEl.style.backgroundImage = `url(${
@@ -77,12 +85,15 @@ class Map extends Component {
       divEl.style.backgroundColor = '#4283f4';
       divEl.style.borderRadius = '10px';
       divEl.style.border = '1px solid #ddd';
+      divEl.setAttribute('tabindex', 0);
 
       let marker = new mapboxgl.Marker(divEl)
         .setLngLat([place.venue.location.lng, place.venue.location.lat])
         .setPopup(popup)
         .addTo(this.map);
 
+      marker.getElement().addEventListener('focus', () => marker.togglePopup());
+      marker.getElement().addEventListener('blur', () => marker.togglePopup());
       markers.push({place, marker});
     });
     this.setState({markers});
@@ -93,7 +104,9 @@ class Map extends Component {
       this.currentMarker.remove();
     }
     if (this.state.markers.length > 0) {
-      this.state.markers.forEach(el => el.marker.remove());
+      this.state.markers.forEach(el => {
+        el.marker.remove();
+      });
     }
   }
 

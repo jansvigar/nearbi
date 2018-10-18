@@ -6,6 +6,9 @@ import Paper from '@material-ui/core/Paper';
 import MenuItem from '@material-ui/core/MenuItem';
 import Typography from '@material-ui/core/Typography';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import IconButton from '@material-ui/core/IconButton';
+import ClearIcon from '@material-ui/icons/Clear';
 import Geocoder from '../Geocoder';
 
 const styles = theme => ({
@@ -25,6 +28,10 @@ const styles = theme => ({
   },
   loader: {
     margin: theme.spacing.unit * 2,
+  },
+  icon: {
+    margin: theme.spacing.unit,
+    fontSize: 32,
   },
 });
 
@@ -69,19 +76,32 @@ function renderSuggestion({
 }
 
 class SearchBox extends Component {
+  state = {
+    inputValue:
+      '2465 Latham Street, Mountain View, California 94040, United States',
+  };
+  handleInputChange = e => {
+    e.preventDefault();
+    this.setState({inputValue: e.target.value});
+  };
+  handleChange = selectedItem => {
+    this.setState({inputValue: selectedItem.place_name});
+    this.props.onChange(selectedItem);
+  };
+  handleClearInput = () => {
+    this.setState({inputValue: ''});
+  };
   render() {
     const {classes} = this.props;
     return (
       <div className={classes.root}>
         <Downshift
           id="nearbi-address-search-box"
-          onChange={this.props.onChange}
+          onChange={this.handleChange}
           itemToString={selectedItem =>
             selectedItem ? selectedItem.place_name : ''
           }
-          initialInputValue={
-            '2465 Latham Street, Mountain View, California 94040, United States'
-          }>
+          inputValue={this.state.inputValue}>
           {({
             getInputProps,
             getItemProps,
@@ -99,6 +119,16 @@ class SearchBox extends Component {
                 variant: 'outlined',
                 InputProps: getInputProps({
                   id: 'search-address',
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="Clear input text"
+                        onClick={this.handleClearInput}>
+                        <ClearIcon className={classes.icon} />
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                  onChange: this.handleInputChange,
                 }),
               })}
               <div {...getMenuProps()}>
