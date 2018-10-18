@@ -17,18 +17,22 @@ const styles = theme => ({
 
 class HomePage extends Component {
   state = {
-    selectedItem: null,
+    lng: '-122.108310',
+    lat: '37.399720',
   };
 
   handleChange = selectedItem => {
-    this.setState({
-      selectedItem,
-    });
+    if (selectedItem.center.length > 0) {
+      this.setState({
+        lng: selectedItem.center[0],
+        lat: selectedItem.center[1],
+      });
+    }
   };
 
   render() {
     const {classes} = this.props;
-    const {selectedItem} = this.state;
+    const {lng, lat} = this.state;
     return (
       <React.Fragment>
         <Header />
@@ -37,9 +41,9 @@ class HomePage extends Component {
             <Grid item xs={12}>
               <SearchBox onChange={this.handleChange} />
             </Grid>
-            <Foursquare selectedItem={selectedItem}>
+            <Foursquare lng={lng} lat={lat}>
               {({places}) => {
-                return <Map selectedAddress={selectedItem} places={places} />;
+                return <Map lng={lng} lat={lat} places={places} />;
               }}
             </Foursquare>
           </Grid>

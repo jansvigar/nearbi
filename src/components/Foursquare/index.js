@@ -8,7 +8,7 @@ class Foursquare extends Component {
   };
 
   fetchData() {
-    const [lng, lat] = this.props.selectedItem.center;
+    const {lng, lat} = this.props;
     fetch(
       `https://api.foursquare.com/v2/venues/explore?client_id=${
         process.env.REACT_APP_FOURSQUARE_CLIENT_ID
@@ -27,9 +27,7 @@ class Foursquare extends Component {
   }
 
   componentDidMount() {
-    if (this.props.selectedItem) {
-      this.fetchData();
-    }
+    this.fetchData();
   }
 
   componentDidUpdate(prevProps, prevState) {

@@ -21,9 +21,6 @@ const styles = theme => ({
 
 class Map extends Component {
   state = {
-    lng: 5,
-    lat: 34,
-    zoom: 1,
     markers: [],
   };
 
@@ -31,32 +28,22 @@ class Map extends Component {
   currentMarker;
 
   componentDidMount() {
-    const {lng, lat, zoom} = this.state;
+    const {lng, lat} = this.props;
 
     this.map = new mapboxgl.Map({
       container: this.mapContainer,
       style: 'mapbox://styles/mapbox/streets-v10',
       center: [lng, lat],
-      zoom,
-    });
-
-    this.map.on('move', () => {
-      const {lng, lat} = this.map.getCenter();
-
-      this.setState({
-        lng: lng.toFixed(4),
-        lat: lat.toFixed(4),
-        zoom: this.map.getZoom().toFixed(2),
-      });
+      zoom: 14,
     });
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (!isEqual(prevProps.selectedAddress, this.props.selectedAddress)) {
-      const [lng, lat] = this.props.selectedAddress.center;
+    if (!isEqual(prevProps, this.props)) {
+      const {lng, lat} = this.props;
       this.map.flyTo({
         center: [lng, lat],
-        zoom: 12,
+        zoom: 14,
       });
     }
 
@@ -69,8 +56,7 @@ class Map extends Component {
   }
 
   renderMarkers() {
-    const {places} = this.props;
-    const [lng, lat] = this.props.selectedAddress.center;
+    const {places, lng, lat} = this.props;
 
     this.clearAllMarkers();
 
