@@ -4,12 +4,13 @@ import isEqual from "react-fast-compare";
 class Foursquare extends Component {
   state = {
     places: [],
-    categories: new Set(),
-    suggestedBounds: []
+    categories: new Set()
   };
 
+  // fetch places data from FourSquare API
   fetchData() {
     const { lng, lat } = this.props;
+
     fetch(
       `https://api.foursquare.com/v2/venues/explore?client_id=${
         process.env.REACT_APP_FOURSQUARE_CLIENT_ID
@@ -28,7 +29,8 @@ class Foursquare extends Component {
         });
       })
       .catch(error => {
-        console.log(error);
+        // if there is an error calling Foursquare API, pass the error to parent
+        this.props.onError();
       });
   }
 

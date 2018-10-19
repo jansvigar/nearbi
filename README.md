@@ -20,7 +20,7 @@ Install all dependencies and start the development server
 
 ```
 yarn install // or npm install
-yarn start
+yarn start // or npm start
 ```
 
 ### Contributing

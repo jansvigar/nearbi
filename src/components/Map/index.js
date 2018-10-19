@@ -53,15 +53,18 @@ class Map extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
+    // Check if the current props is not equal to previous props, then we need to update Map location
     if (!isEqual(prevProps, this.props)) {
       const { lng, lat } = this.props;
       this.map.flyTo({
         center: [lng, lat],
         zoom: 14
       });
+      // also, clear the selected category
       this.setState({ category: "" });
     }
 
+    // only when the places data and category data is different, we re-render the markers
     if (
       (!isEqual(prevProps.places, this.props.places) &&
         this.props.places.length > 0) ||
@@ -84,6 +87,7 @@ class Map extends Component {
     let markers = [];
     let _places = places;
 
+    // filter the places data based on the category selected
     if (category) {
       _places = places.filter(
         place => place.venue.categories[0].name === category
@@ -91,6 +95,7 @@ class Map extends Component {
     }
 
     _places.forEach(place => {
+      // construct popup with place information
       let popup = new mapboxgl.Popup({ offset: 25 }).setHTML(
         `<p>
           <em>${place.venue.categories[0].name}</em><br>
@@ -101,6 +106,7 @@ class Map extends Component {
         </p>`
       );
 
+      // style the marker element
       let divEl = document.createElement("div");
       divEl.style.backgroundImage = `url(${
         place.venue.categories[0].icon.prefix
@@ -141,6 +147,7 @@ class Map extends Component {
     }
   }
 
+  // handle click event for a list item
   handleListItemClick = location => () => {
     this.clearAllPopups();
     location.marker.togglePopup();
@@ -153,6 +160,7 @@ class Map extends Component {
     });
   };
 
+  // handle event for when a category has been changed
   onSelectCategoryChange = category => {
     this.setState({ category });
   };

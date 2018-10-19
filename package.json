@@ -5,7 +5,6 @@
   "dependencies": {
     "@material-ui/core": "^3.2.0",
     "@material-ui/icons": "^3.0.1",
-    "@reach/router": "^1.2.1",
     "downshift": "^3.0.0",
     "lodash.debounce": "^4.0.8",
     "mapbox": "^1.0.0-beta10",

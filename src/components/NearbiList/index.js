@@ -32,14 +32,17 @@ class NearbiList extends Component {
     labelWidth: 20
   };
 
+  // create ref to the input DOM element
   InputLabelRef = React.createRef();
 
   componentDidMount() {
+    // set the correct width for the category input label
     this.setState({
       labelWidth: ReactDOM.findDOMNode(this.InputLabelRef.current).offsetWidth
     });
   }
 
+  // only update when the locations and category data is different
   shouldComponentUpdate(nextProps, nextState) {
     if (
       !isEqual(nextProps.locations, this.props.locations) ||
@@ -50,6 +53,7 @@ class NearbiList extends Component {
     return false;
   }
 
+  // handle when a category is selected and pass the value to parent
   handleChange = e => {
     this.setState({ category: e.target.value });
     this.props.onSelectCategoryChange(e.target.value);

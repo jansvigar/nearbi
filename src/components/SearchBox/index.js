@@ -81,19 +81,23 @@ class SearchBox extends Component {
     inputValue:
       "2465 Latham Street, Mountain View, California 94040, United States"
   };
+
   handleInputChange = e => {
     e.preventDefault();
     this.setState({ inputValue: e.target.value });
   };
+
   handleChange = selectedItem => {
     this.setState({ inputValue: selectedItem.place_name });
     this.props.onChange(selectedItem);
   };
+
   handleClearInput = () => {
     this.setState({ inputValue: "" });
   };
+
   render() {
-    const { classes } = this.props;
+    const { classes, onError } = this.props;
     return (
       <div className={classes.root}>
         <Downshift
@@ -137,7 +141,7 @@ class SearchBox extends Component {
               <div {...getMenuProps()}>
                 {isOpen ? (
                   <Paper className={classes.paper} square>
-                    <Geocoder query={inputValue}>
+                    <Geocoder query={inputValue} onError={onError}>
                       {({ data, loading, error }) => {
                         if (loading) {
                           return (
